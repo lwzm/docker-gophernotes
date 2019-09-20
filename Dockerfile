@@ -33,5 +33,7 @@ COPY jupyter /root/.jupyter
 EXPOSE 8888
 
 ENV GO111MODULE=on GOPROXY=https://goproxy.io
+VOLUME [ "/home" ]
+WORKDIR /home
 
 CMD [ "jupyter", "notebook" ]
