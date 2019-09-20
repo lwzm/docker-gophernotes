@@ -1,7 +1,6 @@
 FROM alpine
-MAINTAINER lwzm
 
-COPY jupyter /root/.jupyter
+ENV PATH=/root/.local/bin:${PATH} GOPATH=/go
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
     && apk add \
@@ -21,7 +20,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
     && ln -s /usr/include/locale.h /usr/include/xlocale.h \
     && pip3 install --user jupyter notebook pyzmq ipykernel \
     ## install gophernotes
-    && GOPATH=/go go get -u github.com/gopherdata/gophernotes \
+    && go get -u github.com/gopherdata/gophernotes \
     && cp /go/bin/gophernotes /usr/local/bin/ \
     && mkdir -p ~/.local/share/jupyter/kernels/gophernotes \
     && cp -r /go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes \
@@ -29,8 +28,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
     && find /usr/lib/python* -name __pycache__ | xargs rm -r \
     && rm -rf /var/cache/apk/*
 
-ENV GOPATH /go
-ENV PATH /root/.local/bin:${PATH}
+COPY jupyter /root/.jupyter
 
 EXPOSE 8888
+
+ENV GO111MODULE=on GOPROXY=https://goproxy.io
+
 CMD [ "jupyter", "notebook" ]
