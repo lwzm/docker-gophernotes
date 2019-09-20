@@ -1,6 +1,6 @@
-### Docker htop & lsof
+### Docker Gophernotes
 
 ```
-docker run -it --pid=host lwzm/htop
+docker run -d -p 8888:8888 lwzm/gophernotes
 ```
 
