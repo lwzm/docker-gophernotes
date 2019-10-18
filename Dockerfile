@@ -1,8 +1,7 @@
 FROM alpine as base
 
-ENV PATH=/root/.local/bin:${PATH} GOPATH=/go
-
-RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/community \
+RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
+    && apk add --no-cache \
         git \
         pkgconfig \
         zeromq-dev \
@@ -11,7 +10,7 @@ RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/commun
     && go version \
     && go get -u github.com/gopherdata/gophernotes \
     && mkdir -p ~/.local/share/jupyter/kernels/gophernotes \
-    && cp -r /go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes
+    && cp -r ~/go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes
 
 
 FROM alpine
@@ -24,7 +23,7 @@ RUN apk add --no-cache python3 py3-zmq \
 #RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/community go
 
 COPY jupyter /root/.jupyter
-COPY --from=base /go/bin/gophernotes /usr/bin
+COPY --from=base /root/go/bin/gophernotes /usr/bin
 COPY --from=base /root/.local /root/.local
 
 EXPOSE 8888
