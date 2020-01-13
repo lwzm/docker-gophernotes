@@ -1,5 +1,7 @@
 FROM alpine as base
 
+#RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/community go
+
 RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
     && apk add --no-cache \
         git \
@@ -13,14 +15,11 @@ RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
     && cp -r ~/go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes
 
 
-FROM alpine
+FROM alpine:3.10
 
 RUN apk add --no-cache python3 py3-zmq \
     && pip3 install --no-cache-dir jupyter \
     && find /usr/lib/ -name '*.pyc' -delete
-
-#ENV GOPATH=/go GO111MODULE=on GOPROXY=https://goproxy.io
-#RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/community go
 
 COPY jupyter /root/.jupyter
 COPY --from=base /root/go/bin/gophernotes /usr/bin
