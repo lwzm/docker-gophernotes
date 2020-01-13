@@ -16,7 +16,7 @@ RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
 FROM alpine
 
 RUN apk add --no-cache python3 py3-zmq \
-    && pip3 install jupyter \
+    && pip3 install --no-cache-dir jupyter \
     && find /usr/lib/ -name '*.pyc' -delete
 
 #ENV GOPATH=/go GO111MODULE=on GOPROXY=https://goproxy.io
