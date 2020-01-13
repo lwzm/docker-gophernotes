@@ -8,7 +8,7 @@ RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
         musl-dev \
         go \
     && go version \
-    && go get -u github.com/gopherdata/gophernotes \
+    && go get -v -ldflags "-s -w" github.com/gopherdata/gophernotes \
     && mkdir -p ~/.local/share/jupyter/kernels/gophernotes \
     && cp -r ~/go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes
 
