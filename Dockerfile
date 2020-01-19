@@ -15,9 +15,9 @@ RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories \
     && cp -r ~/go/src/github.com/gopherdata/gophernotes/kernel/* ~/.local/share/jupyter/kernels/gophernotes
 
 
-FROM alpine:3.10
+FROM alpine
 
-RUN apk add --no-cache python3 py3-zmq \
+RUN apk add --no-cache python3 py3-pyzmq \
     && pip3 install --no-cache-dir jupyter \
     && find /usr/lib/ -name '*.pyc' -delete
 
