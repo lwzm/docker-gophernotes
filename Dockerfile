@@ -25,7 +25,7 @@ COPY jupyter /root/.jupyter
 COPY --from=base /root/go/bin/gophernotes /usr/bin
 COPY --from=base /root/.local /root/.local
 
-EXPOSE 8888
+EXPOSE 80
 
 VOLUME /home
 WORKDIR /home
