@@ -1,18 +1,11 @@
-FROM alpine as base
+FROM golang:alpine as base
 
-#RUN apk add --no-cache -X http://mirrors.tuna.tsinghua.edu.cn/alpine/edge/community go
-
-RUN apk add --no-cache \
-        git \
-        pkgconfig \
-        zeromq-dev \
-        musl-dev \
-        go \
+RUN apk add git gcc musl-dev zeromq-dev \
     && go version \
     && go get -v -ldflags "-s -w" github.com/gopherdata/gophernotes
 
-
 FROM lwzm/jupyter
+LABEL maintainer="lwzm@qq.com"
 
-COPY --from=base /root/go/bin/gophernotes /usr/bin
-COPY --from=base /root/go/src/github.com/gopherdata/gophernotes/kernel /usr/share/jupyter/kernels/gophernotes
+COPY --from=base /go/bin/gophernotes /usr/bin
+COPY --from=base /go/src/github.com/gopherdata/gophernotes/kernel /usr/share/jupyter/kernels/gophernotes
